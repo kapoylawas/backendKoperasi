@@ -28,5 +28,14 @@ const validateUser = [
             throw new Error('Email already exists')
         }
         return true
-    })
+    }),
+
+    // conditional password
+    body('password').if((value, { req }) => req.method === 'POST')
+    .notEmpty().withMessage('Password is required')
+    .isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
+    body('password').if((value, { req }) => req.method === PUT)
+    .optional(),
 ]
+
+module.exports = { validateUser }

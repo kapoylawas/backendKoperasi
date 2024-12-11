@@ -1,13 +1,15 @@
+//import validator
 const { validateLogin } = require("./auth");
-const { validateCart } = require("./cart");
-const { validateCategory } = require("./category");
-const { validateCustomer } = require("./customer");
-const { validateProduct } = require("./product");
-const { validateProfit } = require("./profit");
-const { validateSales } = require("./sale");
-const { validateTransaction } = require("./transaction");
 const { validateUser } = require("./user");
+const { validateCategory } = require("./category");
+const { validateProduct } = require("./product");
+const { validateCustomer } = require("./customer");
+const { validateCart } = require("./cart");
+const { validateTransaction } = require("./transaction");
+const { validateSales } = require("./sale");
+const { validateProfit } = require("./profit");
 
+//export validator
 module.exports = {
     validateLogin,
     validateUser,
@@ -18,4 +20,4 @@ module.exports = {
     validateTransaction,
     validateSales,
     validateProfit
-}
+};

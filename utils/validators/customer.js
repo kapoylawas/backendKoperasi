@@ -1,10 +1,11 @@
 //import express validator
 const { body } = require('express-validator');
 
+// Definisikan validasi untuk create customer
 const validateCustomer = [
-    body('name').notEmpty().withMessage('Name tidak boleh kosong'),
-    body('no_telp').notEmpty().withMessage('No. Telp tidak boleh kosong'),
-    body('address').notEmpty().withMessage('Alamat tidak boleh kosong'),
-]
+    body('name').notEmpty().withMessage('Name is required'),
+    body('no_telp').notEmpty().withMessage('No. Telp is required'),
+    body('address').notEmpty().withMessage('Address is required'),
+];
 
 module.exports = { validateCustomer }

@@ -27,7 +27,6 @@ const login = async(req, res) => {
             },
         });
 
-
         // Jika pengguna tidak ditemukan
         if (!user)
             return res.status(404).json({

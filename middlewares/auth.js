@@ -6,8 +6,8 @@ const jwt = require('jsonwebtoken');
 
 // Middleware untuk memverifikasi token
 const verifyToken = (req, res, next) => {
-    // mengambil token dari header authorization
-    const token = req.headers['authorization']
+    // Mengambil token dari header 'authorization'
+    const token = req.headers['authorization'];
 
     // Jika token tidak ada, kirimkan respons tidak terautentikasi
     if (!token) return res.status(401).json({ message: 'Tidak terautentikasi.' });
@@ -23,7 +23,7 @@ const verifyToken = (req, res, next) => {
         // Lanjutkan ke middleware berikutnya
         next();
     });
-}
+};
 
 // Mengekspor middleware verifyToken agar dapat digunakan di tempat lain
 module.exports = verifyToken;

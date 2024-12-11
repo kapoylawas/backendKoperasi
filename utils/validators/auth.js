@@ -4,9 +4,10 @@ const { body } = require('express-validator');
 //import prisma
 const prisma = require('../../prisma/client');
 
+//definisikan validasi untuk login
 const validateLogin = [
-    body('email').notEmpty().withMessage('Email tidak boleh kosong'),
-    body('password').isLength({ min: 6 }).withMessage('Password minimal harus 6 karakter'),
-]
+    body('email').notEmpty().withMessage('Email is required'),
+    body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
+];
 
 module.exports = { validateLogin };

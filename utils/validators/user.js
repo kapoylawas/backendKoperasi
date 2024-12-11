@@ -1,17 +1,18 @@
-//import express validator
+// Import express validator
 const { body } = require('express-validator');
 
-//import prisma
+// Import prisma
 const prisma = require('../../prisma/client');
 
+// Define validation for create and update user
 const validateUser = [
-    body('name').notEmpty().withMessage('Nama tidak boleh kosong'),
+    body('name').notEmpty().withMessage('Name is required'),
     body('email')
-    .notEmpty().withMessage('Email tidak boleh kosong')
-    .isEmail().withMessage('Format harus email')
+    .notEmpty().withMessage('Email is required')
+    .isEmail().withMessage('Email is invalid')
     .custom(async(value, { req }) => {
         if (!value) {
-            throw new Error('Email tidak boleh kosong')
+            throw new Error('Email is required');
         }
 
         // For update operations, exclude the current user ID from the email uniqueness check
@@ -25,17 +26,18 @@ const validateUser = [
         });
 
         if (user) {
-            throw new Error('Email already exists')
+            throw new Error('Email already exists');
         }
-        return true
+        return true;
     }),
 
-    // conditional password
+    // Conditional validation for password
     body('password').if((value, { req }) => req.method === 'POST')
     .notEmpty().withMessage('Password is required')
     .isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
-    body('password').if((value, { req }) => req.method === PUT)
-    .optional(),
-]
 
-module.exports = { validateUser }
+    body('password').if((value, { req }) => req.method === 'PUT')
+    .optional(),
+];
+
+module.exports = { validateUser };

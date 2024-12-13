@@ -235,7 +235,7 @@ const deleteUser = async(req, res) => {
             }
         })
     } catch (error) {
-        res.status(200).send({
+        res.status(500).send({
             // meta untuk response json
             meta: {
                 success: false,

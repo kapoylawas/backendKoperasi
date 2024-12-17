@@ -157,7 +157,7 @@ const findUserById = async(req, res) => {
             // meta untuk response json
             meta: {
                 success: false,
-                message: 'Terjadi kesalahan pserver'
+                message: 'Terjadi kesalahan server'
             },
             // data
             errors: error

@@ -114,9 +114,202 @@ const createCustomer = async(req, res) => {
 
 const findCustomerById = async(req, res) => {
     const { id } = req.params
+
+    try {
+        const customer = await prisma.customer.findUnique({
+            where: {
+                id: Number(id)
+            },
+            select: {
+                id: true,
+                name: true,
+                no_telp: true,
+                address: true,
+            }
+        })
+
+        if (!customer) {
+            return res.status(404).send({
+                // meta response json
+                meta: {
+                    success: false,
+                    message: `Pelanggan dengan ID: ${id} tidak ditemukan`
+                }
+            })
+        }
+
+        // Mengirimkan respons setelah berhasil mendapatkan pelanggan berdasarkan ID
+        res.status(200).send({
+            // Meta untuk respons JSON
+            meta: {
+                success: true,
+                message: `Berhasil mendapatkan pelanggan dengan ID: ${id}`,
+            },
+            // Data pelanggan
+            data: customer,
+        });
+    } catch (error) {
+        // Jika terjadi kesalahan, kirimkan respons dengan pesan error
+        res.status(500).send({
+            // Meta untuk respons JSON
+            meta: {
+                success: false,
+                message: "Terjadi kesalahan di server",
+            },
+            // Data error
+            errors: error,
+        });
+    }
 }
+
+const updateCutomer = async(req, res) => {
+    // get id parameter
+    const { id } = req.params
+
+    try {
+        // Memperbarui data pelanggan berdasarkan ID
+        const customer = await prisma.customer.update({
+            where: {
+                id: Number(id),
+            },
+            data: {
+                name: req.body.name,
+                no_telp: req.body.no_telp,
+                address: req.body.address,
+                updated_at: new Date(),
+            },
+        });
+
+        // Mengirimkan respons setelah berhasil memperbarui pelanggan
+        res.status(200).send({
+            // Meta untuk respons JSON
+            meta: {
+                success: true,
+                message: "Pelanggan berhasil diperbarui",
+            },
+            // Data pelanggan yang diperbarui
+            data: customer,
+        });
+    } catch (error) {
+        // Jika terjadi kesalahan, kirimkan respons dengan pesan error
+        res.status(500).send({
+            // Meta untuk respons JSON
+            meta: {
+                success: false,
+                message: "Terjadi kesalahan di server",
+            },
+            // Data error
+            errors: error,
+        });
+    }
+}
+
+// Fungsi deleteCustomer untuk menghapus pelanggan
+const deleteCustomer = async(req, res) => {
+    // Mendapatkan ID dari parameter
+    const { id } = req.params;
+
+    try {
+        // Mendapatkan data pelanggan yang akan dihapus
+        const customer = await prisma.customer.findUnique({
+            where: {
+                id: Number(id),
+            },
+        });
+
+        // Jika pelanggan tidak ditemukan, kirimkan respons 404
+        if (!customer) {
+            return res.status(404).send({
+                // Meta untuk respons JSON
+                meta: {
+                    success: false,
+                    message: `Pelanggan dengan ID: ${id} tidak ditemukan`,
+                },
+            });
+        }
+
+        // Menghapus pelanggan berdasarkan ID
+        await prisma.customer.delete({
+            where: {
+                id: Number(id),
+            },
+        });
+
+        // Mengirimkan respons setelah berhasil menghapus pelanggan
+        res.status(200).send({
+            // Meta untuk respons JSON
+            meta: {
+                success: true,
+                message: "Pelanggan berhasil dihapus",
+            },
+        });
+
+    } catch (error) {
+        // Jika terjadi kesalahan, kirimkan respons dengan pesan error
+        res.status(500).send({
+            // Meta untuk respons JSON
+            meta: {
+                success: false,
+                message: "Terjadi kesalahan di server",
+            },
+            // Data error
+            errors: error,
+        });
+    }
+};
+
+// Fungsi allCustomers
+const allCustomers = async(req, res) => {
+    try {
+
+        // Mendapatkan data pelanggan
+        const customers = await prisma.customer.findMany({
+            select: {
+                id: true,
+                name: true,
+            },
+            orderBy: {
+                id: "desc",
+            }
+        });
+
+        // Map the customers to the desired format
+        const formattedCustomers = customers.map(customer => ({
+            value: customer.id,
+            label: customer.name
+        }));
+
+        // Mengirimkan respons
+        res.status(200).send({
+            // Meta untuk respons JSON
+            meta: {
+                success: true,
+                message: "Berhasil mendapatkan semua pelanggan",
+            },
+            // Data pelanggan
+            data: formattedCustomers,
+        });
+
+    } catch (error) {
+        // Jika terjadi kesalahan, kirimkan respons dengan pesan error
+        res.status(500).send({
+            // Meta untuk respons JSON
+            meta: {
+                success: false,
+                message: "Terjadi kesalahan di server",
+            },
+            // Data error
+            errors: error,
+        });
+    }
+};
+
 
 module.exports = {
     findCustomer,
     createCustomer,
+    findCustomerById,
+    updateCutomer,
+    deleteCustomer,
+    allCustomers
 }

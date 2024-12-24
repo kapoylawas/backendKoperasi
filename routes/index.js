@@ -5,7 +5,7 @@ const express = require('express');
 const router = express.Router();
 
 // Import validators and middleware
-const { validateLogin, validateUser, validateCategory, validateProduct, validateCustomer } = require('../utils/validators');
+const { validateLogin, validateUser, validateCategory, validateProduct, validateCustomer, validateCart } = require('../utils/validators');
 const { handleValidationErrors, verifyToken, upload } = require('../middlewares');
 
 // Import controllers
@@ -14,6 +14,7 @@ const userController = require('../controllers/UserController');
 const categoryController = require('../controllers/CategoryController');
 const productController = require('../controllers/ProductController');
 const customerController = require('../controllers/CustomerController');
+const cartController = require('../controllers/CartController');
 
 // Define routes
 const routes = [
@@ -51,6 +52,11 @@ const routes = [
     { method: 'put', path: '/customers/:id', middlewares: [verifyToken, validateCustomer, handleValidationErrors], handler: customerController.updateCutomer },
     { method: 'delete', path: '/customers/:id', middlewares: [verifyToken], handler: customerController.deleteCustomer },
     { method: 'get', path: '/customers-all', middlewares: [verifyToken], handler: customerController.allCustomers },
+
+    // cart routes
+    { method: 'get', path: '/carts', middlewares: [verifyToken], handler: cartController.findCart },
+    { method: 'post', path: '/carts', middlewares: [verifyToken, validateCart, handleValidationErrors], handler: cartController.createCart },
+    { method: 'delete', path: '/carts/:id', middlewares: [verifyToken], handler: cartController.deleteCart },
 ];
 
 // Helper function to create routes

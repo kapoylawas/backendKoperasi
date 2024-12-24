@@ -5,7 +5,7 @@ const express = require('express');
 const router = express.Router();
 
 // Import validators and middleware
-const { validateLogin, validateUser, validateCategory, validateProduct, validateCustomer, validateCart } = require('../utils/validators');
+const { validateLogin, validateUser, validateCategory, validateProduct, validateCustomer, validateCart, validateTransaction } = require('../utils/validators');
 const { handleValidationErrors, verifyToken, upload } = require('../middlewares');
 
 // Import controllers
@@ -15,6 +15,7 @@ const categoryController = require('../controllers/CategoryController');
 const productController = require('../controllers/ProductController');
 const customerController = require('../controllers/CustomerController');
 const cartController = require('../controllers/CartController');
+const transactionController = require('../controllers/TransactionControllers');
 
 // Define routes
 const routes = [
@@ -57,6 +58,10 @@ const routes = [
     { method: 'get', path: '/carts', middlewares: [verifyToken], handler: cartController.findCart },
     { method: 'post', path: '/carts', middlewares: [verifyToken, validateCart, handleValidationErrors], handler: cartController.createCart },
     { method: 'delete', path: '/carts/:id', middlewares: [verifyToken], handler: cartController.deleteCart },
+
+    // transaction routes
+    { method: 'post', path: '/transactions', middlewares: [verifyToken, validateTransaction, handleValidationErrors], handler: transactionController.createTransaction },
+    { method: 'get', path: '/transactions', middlewares: [verifyToken], handler: transactionController.findTransactionByInvoice },
 ];
 
 // Helper function to create routes

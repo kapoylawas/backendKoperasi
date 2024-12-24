@@ -158,7 +158,7 @@ const exportSales = async(req, res) => {
                 invoice: sale.invoice,
                 cashier: sale.cashier.name,
                 // prettier-ignore
-                customer: sale.customer ? .name || "Umum",
+                customer: sale.customer?.name || "Umum",
                 grand_total: `Rp ${moneyFormat(sale.grand_total)}`,
             });
         });

@@ -18,6 +18,7 @@ const cartController = require('../controllers/CartController');
 const transactionController = require('../controllers/TransactionControllers');
 const salesController = require('../controllers/SalesController');
 const profitController = require('../controllers/ProfitController');
+const dashboardController = require('../controllers/DashboardController');
 
 // Define routes
 const routes = [

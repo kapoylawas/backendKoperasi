@@ -41,7 +41,7 @@ const routes = [
     { method: 'get', path: '/categories-all', middlewares: [verifyToken], handler: categoryController.allCategories },
 
     // product routes
-    { method: 'get', path: '/products', middlewares: [verifyToken], handler: productController.findProduct },
+    { method: 'get', path: '/products', middlewares: [verifyToken], handler: productController.findProducts },
     { method: 'post', path: '/products', middlewares: [verifyToken, upload.single('image'), validateProduct, handleValidationErrors], handler: productController.createProduct },
     { method: 'get', path: '/products/:id', middlewares: [verifyToken], handler: productController.findProductById },
     { method: 'put', path: '/products/:id', middlewares: [verifyToken, upload.single('image'), validateProduct, handleValidationErrors], handler: productController.updateProduct },

@@ -8,22 +8,22 @@ const prisma = require("../prisma/client");
 const fs = require("fs");
 
 // Fungsi findProducts untuk mengambil daftar produk dengan paginasi
-const findProduct = async(req, res) => {
+const findProducts = async(req, res) => {
     try {
-        // pagination query
-        const page = parseInt(req.query.page) || 1
-        const limit = parseInt(req.query.limit) || 5
-        const skip = (page - 1) * limit
+        // Mengambil nilai halaman dan limit dari parameter query, dengan nilai default
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 5;
+        const skip = (page - 1) * limit;
 
-        // pencarian parameter query
-        const search = req.query.search || ''
+        // Ambil kata kunci pencarian dari parameter query
+        const search = req.query.search || '';
 
-        // mengambil data product dari database
+        // Mengambil semua produk dari database
         const products = await prisma.product.findMany({
             where: {
                 title: {
-                    contains: search // Mencari judul product mengandung kata kunci
-                }
+                    contains: search, // Mencari judul produk yang mengandung kata kunci
+                },
             },
             select: {
                 id: true,
@@ -43,52 +43,55 @@ const findProduct = async(req, res) => {
                 }
             },
             orderBy: {
-                id: "desc"
+                id: "desc",
             },
             skip: skip,
-            take: limit
-        })
+            take: limit,
+        });
 
-        // menghitung total product untuk pagination
+        // Mengambil jumlah total produk untuk paginasi
         const totalProducts = await prisma.product.count({
             where: {
                 title: {
-                    contains: search // Menghitung jumlah total produk yang sesuai dengan kata kunci pencarian
-                }
-            }
-        })
+                    contains: search, // Menghitung jumlah total produk yang sesuai dengan kata kunci pencarian
+                },
+            },
+        });
 
-        // menghitung total halaman
-        const totalPages = Math.ceil(totalProducts / limit)
+        // Menghitung total halaman
+        const totalPages = Math.ceil(totalProducts / limit);
 
-        // respons send
+        // Mengirim respons
         res.status(200).send({
-            // meta untuk response json
+            //meta untuk respons JSON
             meta: {
                 success: true,
-                message: "Berhasil mengambil data product"
+                message: "Berhasil mengambil semua produk",
             },
-            // get data categori
+            //data produk
             data: products,
-            // pagination
+            //paginasi
             pagination: {
                 currentPage: page,
                 totalPages: totalPages,
-                total: totalProducts
+                perPage: limit,
+                total: totalProducts,
             },
         });
+
     } catch (error) {
+        // Mengirim respons jika terjadi kesalahan
         res.status(500).send({
-            // meta untuk response json
+            //meta untuk respons JSON
             meta: {
                 success: false,
-                message: "terjadi kesalahan di server"
+                message: "Kesalahan internal server",
             },
-            // data errors
-            errors: error
-        })
+            //data kesalahan
+            errors: error,
+        });
     }
-}
+};
 
 const createProduct = async(req, res) => {
 
@@ -472,7 +475,7 @@ const findProductByBarcode = async(req, res) => {
 };
 
 module.exports = {
-    findProduct,
+    findProducts,
     createProduct,
     findProductById,
     updateProduct,

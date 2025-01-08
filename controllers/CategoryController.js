@@ -63,7 +63,8 @@ const findCategories = async(req, res) => {
             pagination: {
                 currentPage: page,
                 totalPages: totalPages,
-                total: totalCategories
+                total: totalCategories,
+                perPage: limit,
             },
         });
     } catch (error) {

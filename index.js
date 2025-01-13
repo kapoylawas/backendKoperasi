@@ -16,8 +16,21 @@ const router = require('./routes')
 //init app
 const app = express()
 
-//use cors
-app.use(cors())
+// Define allowed origins
+const allowedOrigins = ['http://localhost:5173'];
+
+// Use CORS with options
+app.use(cors({
+    origin: function(origin, callback) {
+        // Allow requests with no origin (like mobile apps, curl, etc.)
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.indexOf(origin) === -1) {
+            const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+            return callback(new Error(msg), false);
+        }
+        return callback(null, true);
+    }
+}));
 
 //use body parser
 app.use(bodyParser.urlencoded({ extended: false }))

@@ -1,27 +1,28 @@
 {
-  "name": "backendpos",
-  "version": "1.0.0",
-  "description": "backend point of sales",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "sangga",
-  "license": "ISC",
-  "dependencies": {
-    "@prisma/client": "^5.13.0",
-    "bcryptjs": "^2.4.3",
-    "body-parser": "^1.20.0",
-    "cors": "^2.8.5",
-    "crypto": "^1.0.1",
-    "date-fns": "^3.6.0",
-    "exceljs": "^4.4.0",
-    "express": "^4.19.2",
-    "express-validator": "^7.1.0",
-    "jsonwebtoken": "^9.0.2",
-    "multer": "^1.4.5-lts.1"
-  },
-  "devDependencies": {
-    "prisma": "^5.13.0"
-  }
+    "name": "backendpos",
+    "version": "1.0.0",
+    "description": "backend point of sales",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "dev": "nodemon index.js"
+    },
+    "author": "sangga",
+    "license": "ISC",
+    "dependencies": {
+        "@prisma/client": "^5.13.0",
+        "bcryptjs": "^2.4.3",
+        "body-parser": "^1.20.0",
+        "cors": "^2.8.5",
+        "crypto": "^1.0.1",
+        "date-fns": "^3.6.0",
+        "exceljs": "^4.4.0",
+        "express": "^4.19.2",
+        "express-validator": "^7.1.0",
+        "jsonwebtoken": "^9.0.2",
+        "multer": "^1.4.5-lts.1"
+    },
+    "devDependencies": {
+        "prisma": "^5.13.0"
+    }
 }

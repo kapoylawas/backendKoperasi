@@ -24,6 +24,7 @@ const dashboardController = require('../controllers/DashboardController');
 const routes = [
     // Login routes
     { method: 'post', path: '/login', middlewares: [validateLogin, handleValidationErrors], handler: loginController.login },
+    { method: 'post', path: '/logout', middlewares: [handleValidationErrors], handler: loginController.logout },
 
     // user routes
     { method: 'get', path: '/users', middlewares: [verifyToken], handler: userController.findUsers },

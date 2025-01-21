@@ -12,73 +12,115 @@ const prisma = require("../prisma/client");
 
 // Fungsi login
 const login = async(req, res) => {
-
     try {
-        // Mencari pengguna berdasarkan email
         const user = await prisma.user.findFirst({
             where: {
-                email: req.body.email, // Menggunakan email yang diberikan dari request body
+                email: req.body.email,
             },
             select: {
-                id: true, // Mengambil ID pengguna
-                name: true, // Mengambil nama pengguna
-                email: true, // Mengambil email pengguna
-                password: true, // Mengambil password pengguna
+                id: true,
+                name: true,
+                email: true,
+                password: true,
+                isLoggedIn: true, // Ambil status login
             },
         });
 
-        // Jika pengguna tidak ditemukan
         if (!user)
             return res.status(404).json({
                 success: false,
-                message: "Pengguna tidak ditemukan", // Pesan jika pengguna tidak ditemukan
+                message: "Pengguna tidak ditemukan",
             });
 
-        // Membandingkan password yang diberikan dengan password yang disimpan di database
+        // Memeriksa apakah pengguna sudah login
+        if (user.isLoggedIn)
+            return res.status(403).json({
+                success: false,
+                message: "Pengguna sudah login di perangkat lain",
+            });
+
         const validPassword = await bcrypt.compare(
-            req.body.password, // Password yang diberikan oleh pengguna
-            user.password // Password yang tersimpan di database
+            req.body.password,
+            user.password
         );
 
-        // Jika password salah
         if (!validPassword)
             return res.status(401).json({
                 success: false,
-                message: "Password tidak valid", // Pesan jika password salah
+                message: "Password tidak valid",
             });
 
-        // Membuat token JWT
-        const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
-            expiresIn: "1h", // Token berlaku selama 1 jam
+        // Update status login pengguna
+        await prisma.user.update({
+            where: { id: user.id },
+            data: { isLoggedIn: true },
         });
 
-        // Mendestructur password agar tidak dikembalikan dalam respons
+        const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+            expiresIn: "1h",
+        });
+
         const { password, ...userWithoutPassword } = user;
 
-        // Mengembalikan respons jika login berhasil
         res.status(200).send({
             meta: {
                 success: true,
-                message: "Login berhasil", // Pesan jika login berhasil
+                message: "Login berhasil",
             },
             data: {
-                user: userWithoutPassword, // Mengembalikan data pengguna tanpa password
-                token: token, // Mengembalikan token yang telah dibuat
+                user: userWithoutPassword,
+                token: token,
             },
         });
     } catch (error) {
-        // Jika terjadi kesalahan, kirim respons kesalahan internal server
         res.status(500).send({
-            // Meta untuk respons dalam format JSON
             meta: {
                 success: false,
                 message: "Terjadi kesalahan di server",
             },
-            // Data kesalahan
             errors: error,
         });
     }
 };
 
+// Fungsi logout
+const logout = async(req, res) => {
+    try {
+        // Mendapatkan user ID dari token
+        const token = req.headers.authorization?.split(" ")[1];
+        if (!token) {
+            return res.status(401).json({
+                success: false,
+                message: "Token tidak ditemukan",
+            });
+        }
+
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const userId = decoded.id;
+
+        // Update status login pengguna
+        await prisma.user.update({
+            where: { id: userId },
+            data: { isLoggedIn: false },
+        });
+
+        res.status(200).send({
+            meta: {
+                success: true,
+                message: "Logout berhasil",
+            },
+        });
+    } catch (error) {
+        res.status(500).send({
+            meta: {
+                success: false,
+                message: "Terjadi kesalahan di server",
+            },
+            errors: error,
+        });
+    }
+};
+
+
 // Mengekspor fungsi login agar dapat digunakan di tempat lain
-module.exports = { login };
+module.exports = { login, logout };

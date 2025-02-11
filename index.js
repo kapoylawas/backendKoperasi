@@ -17,6 +17,7 @@ const router = require('./routes')
 const app = express()
 
 const rateLimit = require('express-rate-limit');
+const { checkToken } = require('./middlewares')
 
 
 // Create a rate limiter
@@ -56,8 +57,8 @@ app.use(limiter);
 const port = 3000;
 
 //route
-app.get('/', (req, res) => {
-    res.send('Hello World!')
+app.get('/', checkToken, (req, res) => {
+    res.send('API v.1.0')
 })
 
 // Route to serve uploaded files (if needed)

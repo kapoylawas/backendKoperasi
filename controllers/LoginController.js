@@ -32,12 +32,12 @@ const login = async(req, res) => {
                 message: "Pengguna tidak ditemukan",
             });
 
-        // Memeriksa apakah pengguna sudah login
-        if (user.isLoggedIn)
-            return res.status(403).json({
-                success: false,
-                message: "Pengguna sudah login di perangkat lain",
-            });
+        // // Memeriksa apakah pengguna sudah login
+        // if (user.isLoggedIn)
+        //     return res.status(403).json({
+        //         success: false,
+        //         message: "Pengguna sudah login di perangkat lain",
+        //     });
 
         const validPassword = await bcrypt.compare(
             req.body.password,

@@ -57,7 +57,7 @@ app.use(limiter);
 const port = 3000;
 
 //route
-app.get('/', checkToken, (req, res) => {
+app.get('/', (req, res) => {
     res.send('API v.1.0')
 })
 

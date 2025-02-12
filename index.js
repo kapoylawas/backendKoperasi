@@ -29,7 +29,7 @@ const limiter = rateLimit({
 
 
 // Define allowed origins
-const allowedOrigins = ['http://localhost:5173', 'https://api.warungkapoy.my.id'];
+const allowedOrigins = ['http://localhost:5173', 'https://warungkapoy.my.id'];
 
 // Use CORS with options
 app.use(cors({

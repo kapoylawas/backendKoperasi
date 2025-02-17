@@ -16,19 +16,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/chekout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
       - name: Deploy using ssh
-        uses: actions/checkout@latest
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.PRIVAT_KEY }}
-          port: 22
-          script: |
-              cd ~/var/www/backendKoperasi
-              git pull origin main
-              git status
-              npm install --only=prod
-              pm2 restart BACKEND-API
+        run: |
+          ssh -i ${{ secrets.PRIVAT_KEY }} -p 22 ${{ secrets.USERNAME }}@${{ secrets.HOST }} '
+            cd ~/var/www/backendKoperasi
+            git pull origin main
+            git status
+            npm install --only=prod
+            pm2 restart BACKEND-API
+          '
+        env:
+          PRIVAT_KEY: ${{ secrets.PRIVAT_KEY }}
+          HOST: ${{ secrets.HOST }}
+          USERNAME: ${{ secrets.USERNAME }}
       

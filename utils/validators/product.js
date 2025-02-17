@@ -28,6 +28,10 @@ const validateProduct = [
         if (req.method === 'POST' && !req.file) {
             throw new Error("Image is required");
         }
+        // Check if the image size exceeds 5MB
+        if (req.file && req.file.size > 5 * 1024 * 1024) {
+            throw new Error("Image exceeds capacity");
+        }
         return true;
     }),
     body("buy_price").notEmpty().withMessage("Buy Price is required"),

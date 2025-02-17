@@ -28,8 +28,8 @@ jobs:
           key: ${{ secrets.PRIVATE_KEY }}
           port: 22
           script: |
-            cd ~/Documents/backend/backendPos
+            cd ~/var/www/backendKoperasi
             git pull origin master
             git status
-            npm install --only=prod
+            npm install --only=dev
             pm2 restart BACKEND-API

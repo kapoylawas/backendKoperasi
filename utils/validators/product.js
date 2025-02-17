@@ -23,6 +23,7 @@ const validateProduct = [
     body("category_id").notEmpty().withMessage("Category is required"),
     body("title").notEmpty().withMessage("Title is required"),
     body("description").notEmpty().withMessage("Description is required"),
+    // add size maksimum
     check("image").custom((value, { req }) => {
         // Allow image to be optional if it's an update
         if (req.method === 'POST' && !req.file) {

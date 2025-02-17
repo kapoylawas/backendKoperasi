@@ -23,10 +23,15 @@ const validateProduct = [
     body("category_id").notEmpty().withMessage("Category is required"),
     body("title").notEmpty().withMessage("Title is required"),
     body("description").notEmpty().withMessage("Description is required"),
+    // add size maksimum
     check("image").custom((value, { req }) => {
         // Allow image to be optional if it's an update
         if (req.method === 'POST' && !req.file) {
             throw new Error("Image is required");
+        }
+        // Check if the image size exceeds 5MB
+        if (req.file && req.file.size > 5 * 1024 * 1024) {
+            throw new Error("Image exceeds capacity");
         }
         return true;
     }),

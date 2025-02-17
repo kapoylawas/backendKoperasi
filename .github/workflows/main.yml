@@ -17,7 +17,7 @@ jobs:
 
       - name: Deploy using ssh
         run: |
-          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no -p 22 ${{ secrets.USERNAME }}@${{ secrets.HOST }} '
+          sshpass -p "!Gr11mj00w" ssh -o StrictHostKeyChecking=no -p 22 sangga@warungkapoy.my.id '
             cd ~/var/www/backendKoperasi
             git pull origin main
             git status

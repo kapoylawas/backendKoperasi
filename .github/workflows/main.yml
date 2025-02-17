@@ -19,8 +19,8 @@ jobs:
         run: |
           sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no -p 22 ${{ secrets.USERNAME }}@${{ secrets.HOST }} '
             # Memeriksa apakah direktori ada
-            if [ -d "/home/sangga/var/www/backendKoperasi" ]; then
-              cd /home/sangga/var/www/backendKoperasi
+            if [ -d "/var/www/backendKoperasi" ]; then
+              cd /var/www/backendKoperasi
               git pull origin main
               git status
               npm install --only=prod

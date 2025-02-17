@@ -18,6 +18,8 @@ jobs:
       - name: Deploy using ssh
         run: |
           sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no -p 22 ${{ secrets.USERNAME }}@${{ secrets.HOST }} '
+            # Menambahkan direktori ke daftar aman
+            git config --global --add safe.directory /var/www/backendKoperasi
             # Memeriksa apakah direktori ada
             if [ -d "/var/www/backendKoperasi" ]; then
               cd /var/www/backendKoperasi

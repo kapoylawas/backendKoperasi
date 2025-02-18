@@ -24,6 +24,7 @@ jobs:
             if [ -d "/var/www/backendKoperasi" ]; then
               cd /var/www/backendKoperasi
               git pull origin main
+              git merge origin/main
               git status
               npm install --only=dev
             else

@@ -58,7 +58,7 @@ const port = 3000;
 
 //route
 app.get('/', (req, res) => {
-    res.status(200).send('API v.1.0')
+    res.send('API v.1.0')
 })
 
 // Route to serve uploaded files (if needed)
